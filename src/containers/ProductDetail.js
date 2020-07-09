@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import axios from "axios";
 import {
   Button,
-  Card,
   Container,
   Dimmer,
   Form,
@@ -18,11 +17,11 @@ import {
   Message,
   Segment,
   Select,
-  Divider,
 } from "semantic-ui-react";
 import { productDetailURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
+import { Card, Divider, Spin, Alert, Row, Col } from "antd";
 
 class ProductDetail extends React.Component {
   state = {
@@ -95,6 +94,7 @@ class ProductDetail extends React.Component {
   render() {
     const { data, error, formData, formVisible, loading } = this.state;
     const item = data;
+    const { Meta } = Card;
     return (
       <Container>
         {error && (
@@ -105,14 +105,17 @@ class ProductDetail extends React.Component {
           />
         )}
         {loading && (
-          <Segment>
-            <Dimmer active inverted>
-              <Loader inverted>Loading</Loader>
-            </Dimmer>
-            <Image src="/images/wireframe/short-paragraph.png" />
-          </Segment>
+          <div className="example">
+            <Spin size="large" tip="Loading...">
+              <Alert
+                message="Product Loading!"
+                description="Wait for few moments. It's coming up!"
+                type="info"
+              />
+            </Spin>
+          </div>
         )}
-        <Grid columns={2} divided>
+        {/* <Grid columns={2} divided>
           <Grid.Row>
             <Grid.Column>
               <Card
@@ -214,7 +217,55 @@ class ProductDetail extends React.Component {
                 })}
             </Grid.Column>
           </Grid.Row>
-        </Grid>
+        </Grid> */}
+
+        <div className="site-card-wrapper">
+          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+            <Col span={12}>
+              <Card
+                style={{
+                  maxWidth: 500,
+                  marginTop: 10,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+                hoverable
+                cover={
+                  <img
+                    src={item.image}
+                    style={{ height: 300, maxWidth: 500, minWidth: 200 }}
+                    alt=""
+                  />
+                }
+              >
+                <Divider
+                  orientation="left"
+                  style={{ color: "Red", fontWeight: "bold" }}
+                >
+                  <h3 style={{ color: "Black", fontSize: 20 }}>
+                    {item.category}
+                  </h3>
+                </Divider>
+                <Meta title={item.title} description={item.description} />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card
+                style={{
+                  maxWidth: 500,
+                  marginTop: 10,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+                hoverable
+                title="Card title"
+                bordered={true}
+              >
+                Card content
+              </Card>
+            </Col>
+          </Row>
+        </div>
       </Container>
     );
   }

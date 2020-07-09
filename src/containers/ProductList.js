@@ -1,21 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import {
-  Button,
-  Icon,
-  Container,
-  Dimmer,
-  Image,
-  Item,
-  Label,
-  Loader,
-  Message,
-  Segment,
-} from "semantic-ui-react";
+import { Container, Message } from "semantic-ui-react";
 import { productListURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
+import { List, Card, Avatar, Spin, Alert } from "antd";
 
 class ProductList extends React.Component {
   state = {
@@ -51,6 +41,7 @@ class ProductList extends React.Component {
 
   render() {
     const { data, error, loading } = this.state;
+    const { Meta } = Card;
     return (
       <Container>
         {error && (
@@ -61,15 +52,17 @@ class ProductList extends React.Component {
           />
         )}
         {loading && (
-          <Segment>
-            <Dimmer active inverted>
-              <Loader inverted>Loading</Loader>
-            </Dimmer>
-
-            <Image src="/images/wireframe/short-paragraph.png" />
-          </Segment>
+          <div className="example">
+            <Spin size="large" tip="Loading...">
+              <Alert
+                message="Products Loading!"
+                description="Wait for few moments. It's coming up!"
+                type="info"
+              />
+            </Spin>
+          </div>
         )}
-        <Item.Group divided>
+        {/* <Item.Group divided>
           {data.map((item) => {
             return (
               <Item key={item.id}>
@@ -116,7 +109,31 @@ class ProductList extends React.Component {
               </Item>
             );
           })}
-        </Item.Group>
+        </Item.Group> */}
+        <List
+          grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 3, xxl: 3 }}
+          dataSource={data}
+          pagination={{ pageSize: 3 }}
+          renderItem={(item) => (
+            <List.Item key={item.id}>
+              <Card
+                onClick={() => this.props.history.push(`/products/${item.id}`)}
+                style={{ minHeight: 400 }}
+                title={item.category}
+                hoverable
+                cover={<img src={item.image} style={{ height: 400 }} alt="" />}
+              >
+                <Meta
+                  avatar={
+                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                  }
+                  title={item.title}
+                  description={item.description}
+                />
+              </Card>
+            </List.Item>
+          )}
+        />
       </Container>
     );
   }

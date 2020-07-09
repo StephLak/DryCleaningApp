@@ -5,7 +5,8 @@ import {
   Grid,
   Header,
   Message,
-  Segment
+  Segment,
+  Container,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
@@ -14,14 +15,14 @@ import { authLogin } from "../store/actions/auth";
 class LoginForm extends React.Component {
   state = {
     username: "",
-    password: ""
+    password: "",
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { username, password } = this.state;
     this.props.login(username, password);
@@ -34,76 +35,75 @@ class LoginForm extends React.Component {
       return <Redirect to="/" />;
     }
     return (
-      <Grid
-        textAlign="center"
-        style={{ height: "100vh" }}
-        verticalAlign="middle"
-      >
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" color="teal" textAlign="center">
-            Log-in to your account
-          </Header>
-          {error && <p>{this.props.error.message}</p>}
+      <Container>
+        <Grid
+          textAlign="center"
+          style={{ marginTop: 20, paddingBottom: 110 }}
+          // verticalAlign="middle"
+        >
+          <Grid.Column style={{ maxWidth: 700, minWidth: 250 }}>
+            <Header as="h2" color="teal" textAlign="center">
+              Log-in to your account
+            </Header>
+            {error && <p>{this.props.error.message}</p>}
 
-          <React.Fragment>
-            <Form size="large" onSubmit={this.handleSubmit}>
-              <Segment stacked>
-                <Form.Input
-                  onChange={this.handleChange}
-                  value={username}
-                  name="username"
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="Username"
-                />
-                <Form.Input
-                  onChange={this.handleChange}
-                  fluid
-                  value={password}
-                  name="password"
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                />
+            <React.Fragment>
+              <Form size="large" onSubmit={this.handleSubmit}>
+                <Segment stacked>
+                  <Form.Input
+                    onChange={this.handleChange}
+                    value={username}
+                    name="username"
+                    fluid
+                    icon="user"
+                    iconPosition="left"
+                    placeholder="Username"
+                  />
+                  <Form.Input
+                    onChange={this.handleChange}
+                    fluid
+                    value={password}
+                    name="password"
+                    icon="lock"
+                    iconPosition="left"
+                    placeholder="Password"
+                    type="password"
+                  />
 
-                <Button
-                  color="teal"
-                  fluid
-                  size="large"
-                  loading={loading}
-                  disabled={loading}
-                >
-                  Login
-                </Button>
-              </Segment>
-            </Form>
-            <Message>
-              New to us? <NavLink to="/signup">Sign Up</NavLink>
-            </Message>
-          </React.Fragment>
-        </Grid.Column>
-      </Grid>
+                  <Button
+                    color="teal"
+                    fluid
+                    size="large"
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    Login
+                  </Button>
+                </Segment>
+              </Form>
+              <Message>
+                New to us? <NavLink to="/signup">Sign Up</NavLink>
+              </Message>
+            </React.Fragment>
+          </Grid.Column>
+        </Grid>
+      </Container>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    token: state.auth.token
+    token: state.auth.token,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    login: (username, password) => dispatch(authLogin(username, password))
+    login: (username, password) => dispatch(authLogin(username, password)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

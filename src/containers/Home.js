@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   Button,
   Container,
@@ -10,8 +10,15 @@ import {
   Responsive,
   Segment,
   Sidebar,
-  Visibility
+  Visibility,
 } from "semantic-ui-react";
+import { Carousel } from "antd";
+import logo from "../media/DryCleaning1.jpeg";
+import logo2 from "../media/DryCleaning2.jpg";
+import logo3 from "../media/DryCleaning3.jpg";
+import logo4 from "../media/DryCleaning4.jpeg";
+import logo5 from "../media/DryCleaning5.jpeg";
+import logo6 from "../media/DryCleaning6.jpg";
 
 const getWidth = () => {
   const isSSR = typeof window === "undefined";
@@ -41,7 +48,7 @@ class DesktopContainer extends Component {
 }
 
 DesktopContainer.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 class MobileContainer extends Component {
@@ -67,7 +74,7 @@ class MobileContainer extends Component {
 }
 
 MobileContainer.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 const ResponsiveContainer = ({ children }) => (
@@ -78,11 +85,33 @@ const ResponsiveContainer = ({ children }) => (
 );
 
 ResponsiveContainer.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 const HomepageLayout = () => (
   <ResponsiveContainer>
+    <Fragment>
+      <Carousel autoplay effect="fade">
+        <div className="img-fluid">
+          <img src={logo} alt="logo" />
+        </div>
+        <div className="img-fluid">
+          <img src={logo2} alt="logo" />
+        </div>
+        <div className="img-fluid">
+          <img src={logo3} alt="logo" />
+        </div>
+        <div className="img-fluid">
+          <img src={logo4} alt="logo" />
+        </div>
+        <div className="img-fluid">
+          <img src={logo5} alt="logo" />
+        </div>
+        <div className="img-fluid">
+          <img src={logo6} alt="logo" />
+        </div>
+      </Carousel>
+    </Fragment>
     <Segment style={{ padding: "8em 0em" }} vertical>
       <Grid container stackable verticalAlign="middle">
         <Grid.Row>
@@ -104,12 +133,7 @@ const HomepageLayout = () => (
             </p>
           </Grid.Column>
           <Grid.Column floated="right" width={6}>
-            <Image
-              bordered
-              rounded
-              size="large"
-              src="/images/wireframe/white-image.png"
-            />
+            <Image bordered rounded size="large" src={logo} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -135,7 +159,7 @@ const HomepageLayout = () => (
               "I shouldn't have gone with their competitor."
             </Header>
             <p style={{ fontSize: "1.33em" }}>
-              <Image avatar src="/images/avatar/large/nan.jpg" />
+              <Image avatar src={logo2} />
               <b>Nan</b> Chief Fun Officer Acme Toys
             </p>
           </Grid.Column>

@@ -5,7 +5,7 @@ import {
   Grid,
   Header,
   Message,
-  Segment
+  Segment,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
@@ -16,16 +16,16 @@ class RegistrationForm extends React.Component {
     username: "",
     email: "",
     password1: "",
-    password2: ""
+    password2: "",
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { username, email, password1, password2 } = this.state;
     this.props.signup(username, email, password1, password2);
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -36,12 +36,8 @@ class RegistrationForm extends React.Component {
       return <Redirect to="/" />;
     }
     return (
-      <Grid
-        textAlign="center"
-        style={{ height: "100vh" }}
-        verticalAlign="middle"
-      >
-        <Grid.Column style={{ maxWidth: 450 }}>
+      <Grid textAlign="center" style={{ marginTop: 20 }}>
+        <Grid.Column style={{ maxWidth: 700, minWidth: 250 }}>
           <Header as="h2" color="teal" textAlign="center">
             Signup to your account
           </Header>
@@ -110,22 +106,19 @@ class RegistrationForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    token: state.auth.token
+    token: state.auth.token,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     signup: (username, email, password1, password2) =>
-      dispatch(authSignup(username, email, password1, password2))
+      dispatch(authSignup(username, email, password1, password2)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RegistrationForm);
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);
