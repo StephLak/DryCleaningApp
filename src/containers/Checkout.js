@@ -5,8 +5,6 @@ import {
   Elements,
   StripeProvider,
 } from "react-stripe-elements";
-//import { Elements, CardElement } from "@stripe/react-stripe-js";
-//import { loadStripe } from "@stripe/stripe-js";
 import {
   Button,
   Container,
@@ -351,9 +349,6 @@ class CheckoutForm extends Component {
 }
 
 const InjectedForm = withRouter(injectStripe(CheckoutForm));
-// const stripePromise = loadStripe(
-//   "pk_test_51GunXnB9GEXVUU97tJYpFoKuErZZd3iDvY2zsY5bUNzEZHghZ3Dk52o3lLJJWpl34jXTjjFHs6VgU6soNtdrGZVo00h16scNWT"
-// );
 const WrappedForm = () => (
   <Container text>
     <StripeProvider apiKey="pk_test_51GunXnB9GEXVUU97tJYpFoKuErZZd3iDvY2zsY5bUNzEZHghZ3Dk52o3lLJJWpl34jXTjjFHs6VgU6soNtdrGZVo00h16scNWT">

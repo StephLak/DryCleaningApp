@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, Menu as SeMenu } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../store/actions/auth";
@@ -20,7 +20,6 @@ class CustomLayout extends React.Component {
   }
   state = {
     collapsed: false,
-    activeItem: "bio",
   };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
@@ -32,155 +31,12 @@ class CustomLayout extends React.Component {
 
   render() {
     const { authenticated, cart, loading } = this.props;
-    const { activeItem } = this.state;
     return (
-      // <Layout>
-      // <Header
-      //   className="header"
-      //   style={{ position: "fixed", zIndex: 1, width: "100%" }}
-      // >
-      //   {/* <div className="logo" /> */}
-      //   <Menu theme="dark" mode="horizontal" style={{ float: "left" }}>
-      //     <Menu.Item key="1">MyDryCleaningApp</Menu.Item>
-      //   </Menu>
-
-      //   {authenticated ? (
-      //     <React.Fragment>
-      //       <Menu
-      //         theme="dark"
-      //         mode="horizontal"
-      //         // defaultSelectedKeys={["2"]}
-      //         style={{ float: "right" }}
-      //       >
-      //         <Menu.Item>
-      //           <Dropdown
-      //             icon="cart"
-      //             loading={loading}
-      //             text={`${cart !== null ? cart.order_items.length : 0}`}
-      //             pointing
-      //             className="link item"
-      //           >
-      //             <Dropdown.Menu>
-      //               {cart !== null ? (
-      //                 <React.Fragment>
-      //                   {cart.order_items.map((order_item) => {
-      //                     return (
-      //                       <Dropdown.Item key={order_item.id}>
-      //                         {order_item.quantity} x {order_item.item.title}
-      //                       </Dropdown.Item>
-      //                     );
-      //                   })}
-      //                   {cart.order_items.length < 1 ? (
-      //                     <Dropdown.Item>No items in your cart</Dropdown.Item>
-      //                   ) : null}
-      //                   <Dropdown.Divider />
-
-      //                   <Dropdown.Item
-      //                     icon="arrow right"
-      //                     text="Checkout"
-      //                     onClick={() =>
-      //                       this.props.history.push("/order-summary")
-      //                     }
-      //                   />
-      //                 </React.Fragment>
-      //               ) : (
-      //                 <Dropdown.Item>No items in your cart</Dropdown.Item>
-      //               )}
-      //             </Dropdown.Menu>
-      //           </Dropdown>
-      //         </Menu.Item>
-      //         <Menu.Item onClick={() => this.props.logout()} key="2">
-      //           Logout
-      //         </Menu.Item>
-      //       </Menu>
-      //     </React.Fragment>
-      //   ) : (
-      //     <Menu
-      //       theme="dark"
-      //       mode="horizontal"
-      //       //defaultSelectedKeys={["2"]}
-      //       style={{ float: "right" }}
-      //     >
-      //       <Menu.Item key="1">
-      //         <Link to="/login">Login</Link>
-      //       </Menu.Item>
-      //       <Menu.Item key="2">
-      //         <Link to="/signup">Signup</Link>
-      //       </Menu.Item>
-      //     </Menu>
-      //   )}
-      // </Header>
-      //   <Layout style={{ minHeight: "100vh" }}>
-      //     <Sider
-      //       collapsible
-      //       collapsed={this.state.collapsed}
-      //       onCollapse={this.onCollapse}
-      //       style={{
-      //         paddingTop: 60,
-      //         overflow: "auto",
-      //         height: "100vh",
-      //         position: "fixed",
-      //         left: 0,
-      //       }}
-      //     >
-      //       <div className="logo" />
-      // <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-      //   <Menu.Item
-      //     key="1"
-      //     icon={<DesktopOutlined />}
-      //     // style={{ height: 50 }}
-      //   >
-      //     <Link to="/" style={{ fontSize: 18 }}>
-      //       Home
-      //     </Link>
-      //   </Menu.Item>
-      //   <Menu.Item key="2" icon={<FileOutlined />}>
-      //     <Link to="/products" style={{ fontSize: 18 }}>
-      //       Products
-      //     </Link>
-      //   </Menu.Item>
-      //   <Menu.Item key="3" icon={<UserOutlined />}>
-      //     <Link to="/profile" style={{ fontSize: 18 }}>
-      //       Profile
-      //     </Link>
-      //   </Menu.Item>
-      //   <Menu.Item key="4" icon={<UserOutlined />}>
-      //     <Link to="/dashboard" style={{ fontSize: 18 }}>
-      //       MyDashboard
-      //     </Link>
-      //   </Menu.Item>
-      // </Menu>
-      //     </Sider>
-      //     <Layout
-      //       className="site-layout"
-      //       style={{ marginLeft: 200, padding: 0 }}
-      //     >
-      //       <Header className="site-layout-background" style={{ padding: 0 }} />
-      //       <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
-      //         {/* <Breadcrumb style={{ margin: "16px 0" }}>
-      //           <Breadcrumb.Item>User</Breadcrumb.Item>
-      //           <Breadcrumb.Item>Bill</Breadcrumb.Item>
-      //         </Breadcrumb> */}
-      //         <div
-      //           className="site-layout-background"
-      //           style={{ padding: 40, minHeight: 360, paddingBottom: 50 }}
-      //         >
-      //           {this.props.children}
-      //         </div>
-      //       </Content>
-      //       <Footer style={{ textAlign: "center" }}>
-      //         Ant Design ©2018 Created by Ant UED
-      //       </Footer>
-      //     </Layout>
-      //   </Layout>
-      // </Layout>
-
       <Layout>
         <Header
           className="header"
           style={{ position: "fixed", zIndex: 1, width: "100%" }}
         >
-          {/* <div className="logo" /> */}
           <Menu theme="dark" mode="horizontal" style={{ float: "left" }}>
             <Menu.Item key="1">
               <ChromeOutlined />
@@ -190,12 +46,7 @@ class CustomLayout extends React.Component {
 
           {authenticated ? (
             <React.Fragment>
-              <Menu
-                theme="dark"
-                mode="horizontal"
-                // defaultSelectedKeys={["2"]}
-                style={{ float: "right" }}
-              >
+              <Menu theme="dark" mode="horizontal" style={{ float: "right" }}>
                 <Menu.Item>
                   <Dropdown
                     icon="cart"
@@ -239,12 +90,7 @@ class CustomLayout extends React.Component {
               </Menu>
             </React.Fragment>
           ) : (
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              //defaultSelectedKeys={["2"]}
-              style={{ float: "right" }}
-            >
+            <Menu theme="dark" mode="horizontal" style={{ float: "right" }}>
               <Menu.Item key="1">
                 <Link to="/login">Login</Link>
               </Menu.Item>
@@ -290,28 +136,6 @@ class CustomLayout extends React.Component {
                 </Link>
               </Menu.Item>
             </Menu>
-            {/* <SeMenu fluid vertical tabular>
-              <SeMenu.Item
-                name="bio"
-                active={activeItem === "bio"}
-                onClick={this.handleItemClick}
-              />
-              <SeMenu.Item
-                name="pics"
-                active={activeItem === "pics"}
-                onClick={this.handleItemClick}
-              />
-              <SeMenu.Item
-                name="companies"
-                active={activeItem === "companies"}
-                onClick={this.handleItemClick}
-              />
-              <SeMenu.Item
-                name="links"
-                active={activeItem === "links"}
-                onClick={this.handleItemClick}
-              />
-            </SeMenu> */}
           </Sider>
           <Layout>
             <Content style={{ margin: "24px 16px 0", marginTop: 80 }}>

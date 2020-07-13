@@ -42,37 +42,14 @@ class OrderSummary extends React.Component {
         this.setState({ data: res.data, loading: false });
       })
       .catch((err) => {
-        if (err.response.status === 404) {
-          this.setState({
-            error: "You currently do not have an order",
-            loading: false,
-          });
-        } else {
-          this.setState({ error: err, loading: false });
-        }
+        this.setState({ error: err, loading: false });
       });
   };
 
-  renderVariations = (orderItem) => {
-    let text = "";
-    orderItem.item_variations.forEach((iv) => {
-      text += `${iv.variation.name}: ${iv.value}, `;
-    });
-    return text;
-  };
-
-  handleFormatData = (itemVariations) => {
-    // convert [{id: 1},{id: 2}] to [1,2] - they're all variations
-    return Object.keys(itemVariations).map((key) => {
-      return itemVariations[key].id;
-    });
-  };
-
-  handleAddToCart = (slug, itemVariations) => {
+  handleAddToCart = (slug) => {
     this.setState({ loading: true });
-    const variations = this.handleFormatData(itemVariations);
     authAxios
-      .post(addToCartURL, { slug, variations })
+      .post(addToCartURL, { slug })
       .then((res) => {
         this.handleFetchOrder();
         this.props.refreshCart();
@@ -83,11 +60,10 @@ class OrderSummary extends React.Component {
       });
   };
 
-  handleRemoveQuantityFromCart = (slug, itemVariations) => {
+  handleRemoveQuantityFromCart = (slug) => {
     this.setState({ loading: true });
-    const variations = this.handleFormatData(itemVariations);
     authAxios
-      .post(orderItemUpdateQuantityURL, { slug, variations })
+      .post(orderItemUpdateQuantityURL, { slug })
       .then((res) => {
         this.handleFetchOrder();
         this.props.refreshCart();
@@ -103,6 +79,7 @@ class OrderSummary extends React.Component {
       .delete(orderItemDeleteURL(itemID))
       .then((res) => {
         this.handleFetchOrder();
+        this.props.refreshCart();
       })
       .catch((err) => {
         this.setState({ error: err });
@@ -153,10 +130,7 @@ class OrderSummary extends React.Component {
                 return (
                   <Table.Row key={orderItem.id}>
                     <Table.Cell>{i + 1}</Table.Cell>
-                    <Table.Cell>
-                      {orderItem.item.title} -{" "}
-                      {this.renderVariations(orderItem)}
-                    </Table.Cell>
+                    <Table.Cell>{orderItem.item.title}</Table.Cell>
                     <Table.Cell>${orderItem.item.price}</Table.Cell>
                     <Table.Cell textAlign="center">
                       <Icon

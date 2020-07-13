@@ -62,54 +62,6 @@ class ProductList extends React.Component {
             </Spin>
           </div>
         )}
-        {/* <Item.Group divided>
-          {data.map((item) => {
-            return (
-              <Item key={item.id}>
-                <Item.Image src={item.image} />
-                <Item.Content>
-                  <Item.Header
-                    as="a"
-                    onClick={() =>
-                      this.props.history.push(`/products/${item.id}`)
-                    }
-                  >
-                    {item.title}
-                  </Item.Header>
-                  <Item.Meta>
-                    <span className="cinema">{item.category}</span>
-                  </Item.Meta>
-                  <Item.Description>{item.description}</Item.Description>
-                  <Item.Extra>
-                    <Button
-                      primary
-                      floated="right"
-                      icon
-                      labelPosition="right"
-                      onClick={() => this.handleAddToCart(item.slug)}
-                    >
-                      Add to cart
-                      <Icon name="cart plus" />
-                    </Button>
-                    {item.discount_price && (
-                      <Label
-                        color={
-                          item.label === "primary"
-                            ? "blue"
-                            : item.label === "secondary"
-                            ? "green"
-                            : "olive"
-                        }
-                      >
-                        {item.label}
-                      </Label>
-                    )}
-                  </Item.Extra>
-                </Item.Content>
-              </Item>
-            );
-          })}
-        </Item.Group> */}
         <List
           grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 3, xxl: 3 }}
           dataSource={data}

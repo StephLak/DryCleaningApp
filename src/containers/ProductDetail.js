@@ -2,22 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
-import {
-  Button,
-  Container,
-  Dimmer,
-  Form,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  Item,
-  Label,
-  Loader,
-  Message,
-  Segment,
-  Select,
-} from "semantic-ui-react";
+import { Container, Message } from "semantic-ui-react";
 import { productDetailURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
@@ -31,17 +16,17 @@ import {
   Steps,
   message,
   Progress,
+  Button,
+  Tooltip,
 } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 const { Step } = Steps;
 
 class ProductDetail extends React.Component {
   state = {
     loading: false,
     error: null,
-    formVisible: false,
     data: [],
-    formData: {},
     current: 0,
     percent: 0,
     status: "",
@@ -50,13 +35,6 @@ class ProductDetail extends React.Component {
   componentDidMount() {
     this.handleFetchItem();
   }
-
-  handleToggleForm = () => {
-    const { formVisible } = this.state;
-    this.setState({
-      formVisible: !formVisible,
-    });
-  };
 
   handleFetchItem = () => {
     const {
@@ -121,19 +99,10 @@ class ProductDetail extends React.Component {
       });
   };
 
-  handleFormatData = (formData) => {
-    // convert {colour: 1, size: 2} to [1,2] - they're all variations
-    return Object.keys(formData).map((key) => {
-      return formData[key];
-    });
-  };
-
   handleAddToCart = (slug) => {
     this.setState({ loading: true });
-    const { formData } = this.state;
-    const variations = this.handleFormatData(formData);
     authAxios
-      .post(addToCartURL, { slug, variations })
+      .post(addToCartURL, { slug })
       .then((res) => {
         console.log(res.data);
         this.props.refreshCart();
@@ -144,26 +113,8 @@ class ProductDetail extends React.Component {
       });
   };
 
-  handleChange = (e, { name, value }) => {
-    const { formData } = this.state;
-    const updatedFormData = {
-      ...formData,
-      [name]: value,
-    };
-    this.setState({ formData: updatedFormData });
-  };
-
   render() {
-    const {
-      data,
-      error,
-      formData,
-      formVisible,
-      loading,
-      current,
-      percent,
-      status,
-    } = this.state;
+    const { data, error, loading, current, percent, status } = this.state;
     const item = data;
     const { Meta } = Card;
     return (
@@ -186,109 +137,6 @@ class ProductDetail extends React.Component {
             </Spin>
           </div>
         )}
-        {/* <Grid columns={2} divided>
-          <Grid.Row>
-            <Grid.Column>
-              <Card
-                fluid
-                image={item.image}
-                header={item.title}
-                meta={
-                  <React.Fragment>
-                    {item.category}
-                    {item.discount_price && (
-                      <Label
-                        color={
-                          item.label === "primary"
-                            ? "blue"
-                            : item.label === "secondary"
-                            ? "green"
-                            : "olive"
-                        }
-                      >
-                        {item.label}
-                      </Label>
-                    )}
-                  </React.Fragment>
-                }
-                description={item.description}
-                extra={
-                  <React.Fragment>
-                    <Button
-                      fluid
-                      color="yellow"
-                      floated="right"
-                      icon
-                      labelPosition="right"
-                      onClick={this.handleToggleForm}
-                    >
-                      Add to cart
-                      <Icon name="cart plus" />
-                    </Button>
-                  </React.Fragment>
-                }
-              />
-              {formVisible && (
-                <React.Fragment>
-                  <Divider />
-                  <Form onSubmit={() => this.handleAddToCart(item.slug)}>
-                    {data.variations.map((v) => {
-                      const name = v.name.toLowerCase();
-                      return (
-                        <Form.Field key={v.id}>
-                          <Select
-                            name={name}
-                            onChange={this.handleChange}
-                            placeholder={`Select a ${name}`}
-                            fluid
-                            selection
-                            options={v.item_variations.map((item) => {
-                              return {
-                                key: item.id,
-                                text: item.value,
-                                value: item.id,
-                              };
-                            })}
-                            value={formData[name]}
-                          />
-                        </Form.Field>
-                      );
-                    })}
-                    <Form.Button primary>Add</Form.Button>
-                  </Form>
-                </React.Fragment>
-              )}
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h2">Try different variations</Header>
-              {data.variations &&
-                data.variations.map((v) => {
-                  return (
-                    <React.Fragment key={v.id}>
-                      <Header as="h3">{v.name}</Header>
-                      <Item.Group divided>
-                        {v.item_variations.map((iv) => {
-                          return (
-                            <Item key={iv.id}>
-                              {iv.attachment && (
-                                <Item.Image
-                                  size="tiny"
-                                  src={`http://127.0.0.1:8000${iv.attachment}`}
-                                />
-                              )}
-                              <Item.Content verticalAlign="middle">
-                                {iv.value}
-                              </Item.Content>
-                            </Item>
-                          );
-                        })}
-                      </Item.Group>
-                    </React.Fragment>
-                  );
-                })}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid> */}
 
         <div style={{ paddingBottom: 100 }}>
           <Row>
@@ -314,9 +162,9 @@ class ProductDetail extends React.Component {
                   <h3 style={{ color: "Black", fontSize: 20 }}>
                     {item.category}
                   </h3>
-                  <h3 style={{ color: "Black", fontSize: 20 }}>
+                  {/* <h3 style={{ color: "Black", fontSize: 20 }}>
                     {item.publish}
-                  </h3>
+                  </h3> */}
                 </Divider>
                 <Meta title={item.title} description={item.description} />
               </Card>
@@ -331,87 +179,67 @@ class ProductDetail extends React.Component {
                 title="Product Processing Details"
                 bordered={true}
               >
-                <Row gutter={16}>
-                  <Col style={{ background: "#0092ff" }} span={8}>
-                    <h3>Wash Status</h3>
-                  </Col>
-                  <Col span={16}>
-                    {item.washed === true ? (
-                      <h3 style={{ background: "#0092ff" }}>Washed</h3>
-                    ) : (
-                      <h3 style={{ background: "#0092ff" }}>Washing</h3>
-                    )}
-                  </Col>
-                </Row>
-                <Divider />
-                <Row gutter={16}>
-                  <Col style={{ background: "#0092ff" }} span={8}>
-                    <h3>Ironing Status</h3>
-                  </Col>
-                  <Col span={16}>
-                    {item.ironed === true ? (
-                      <h3 style={{ background: "#0092ff" }}>Ironed</h3>
-                    ) : (
-                      <h3 style={{ background: "#0092ff" }}>Ironing</h3>
-                    )}
-                  </Col>
-                </Row>
-                <Divider />
-                <Row gutter={16}>
-                  <Col style={{ background: "#0092ff" }} span={8}>
-                    <h3>Packing Status</h3>
-                  </Col>
-                  <Col span={16}>
-                    {item.packed === true ? (
-                      <h3 style={{ background: "#0092ff" }}>Packed</h3>
-                    ) : (
-                      <h3 style={{ background: "#0092ff" }}>Packing</h3>
-                    )}
-                  </Col>
-                </Row>
-                <Divider />
-                <Row gutter={16}>
-                  <Col style={{ background: "#0092ff" }} span={8}>
-                    <h3>Complete Status</h3>
-                  </Col>
-                  <Col span={16}>
-                    {item.ready === true ? (
-                      <h3 style={{ background: "#0092ff" }}>
-                        Ready for checkout
-                      </h3>
-                    ) : (
-                      <h3 style={{ background: "#0092ff" }}>
-                        Not ready for checkout
-                      </h3>
-                    )}
-                  </Col>
-                </Row>
-                {/* <Steps current={current}>
-                  {steps.map((item) => (
-                    <Step key={item.title} title={item.title} />
-                  ))}
-                </Steps>
-                <div className="steps-content">{steps[current].content}</div> */}
-                <Steps
-                  type="navigation"
-                  current={current}
-                  className="site-navigation-steps"
-                >
-                  <Step status="wait" title="Just In" />
-                  <Step status="process" title="Washed" />
-                  <Step status="process" title="Ironed" />
-                  <Step status="process" title="Packed" />
-                  <Step status="finish" title="Ready" />
-                </Steps>
-                <Progress
-                  type="circle"
-                  strokeColor={{
-                    "0%": "#108ee9",
-                    "100%": "#87d068",
-                  }}
-                  percent={percent}
-                  status={status}
-                />
+                <Container>
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Steps
+                        type="navigation"
+                        current={current}
+                        direction="vertical"
+                        className="site-navigation-steps"
+                      >
+                        <Step status="wait" title="Just In" />
+                        <Step status="process" title="Washed" />
+                        <Step status="process" title="Ironed" />
+                        <Step status="process" title="Packed" />
+                        <Step status="finish" title="Ready" />
+                      </Steps>
+                    </Col>
+                    <Col span={12}>
+                      <Row style={{ marginLeft: 40, marginTop: 40 }}>
+                        <Progress
+                          type="circle"
+                          strokeColor={{
+                            "0%": "#108ee9",
+                            "100%": "#87d068",
+                          }}
+                          percent={percent}
+                          status={status}
+                        />
+                      </Row>
+                      <Row style={{ float: "right", marginTop: 100 }}>
+                        {item.washed === true &&
+                        item.ironed === true &&
+                        item.packed === true &&
+                        item.ready === true ? (
+                          <Tooltip title="You can now add to cart">
+                            <Button
+                              type="primary"
+                              shape="round"
+                              icon={<ShoppingCartOutlined />}
+                              size="large"
+                              onClick={() => this.handleAddToCart(item.slug)}
+                            >
+                              Add To Cart
+                            </Button>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title="You can't add to cart yet">
+                            <Button
+                              type="primary"
+                              shape="round"
+                              icon={<ShoppingCartOutlined />}
+                              size="large"
+                              disabled
+                            >
+                              Add To Cart
+                            </Button>
+                          </Tooltip>
+                        )}
+                      </Row>
+                    </Col>
+                  </Row>
+                </Container>
               </Card>
             </Col>
           </Row>
