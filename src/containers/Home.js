@@ -93,22 +93,22 @@ const HomepageLayout = () => (
     <Fragment>
       <Carousel autoplay effect="fade">
         <div className="img-fluid">
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" style={{ minWidth: 200 }} />
         </div>
         <div className="img-fluid">
-          <img src={logo2} alt="logo" />
+          <img src={logo2} alt="logo" style={{ minWidth: 200 }} />
         </div>
         <div className="img-fluid">
-          <img src={logo3} alt="logo" />
+          <img src={logo3} alt="logo" style={{ minWidth: 200 }} />
         </div>
         <div className="img-fluid">
-          <img src={logo4} alt="logo" />
+          <img src={logo4} alt="logo" style={{ minWidth: 200 }} />
         </div>
         <div className="img-fluid">
-          <img src={logo5} alt="logo" />
+          <img src={logo5} alt="logo" style={{ minWidth: 200 }} />
         </div>
         <div className="img-fluid">
-          <img src={logo6} alt="logo" />
+          <img src={logo6} alt="logo" style={{ minWidth: 200 }} />
         </div>
       </Carousel>
     </Fragment>

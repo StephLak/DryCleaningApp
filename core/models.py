@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Sum
 from django.shortcuts import reverse
 from django_countries.fields import CountryField
+from django.utils import timezone
 
 
 CATEGORY_CHOICES = (
@@ -35,6 +36,8 @@ class UserProfile(models.Model):
 
 
 class Item(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
@@ -43,6 +46,16 @@ class Item(models.Model):
     slug = models.SlugField()
     description = models.TextField()
     image = models.ImageField()
+    washed = models.BooleanField(default=False)
+    ironed = models.BooleanField(default=False)
+    packed = models.BooleanField(default=False)
+    ready = models.BooleanField(default=False)
+    publish = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('-publish',)
 
     def __str__(self):
         return self.title

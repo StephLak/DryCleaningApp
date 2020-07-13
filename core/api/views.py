@@ -37,6 +37,14 @@ class ItemListView(ListAPIView):
     queryset = Item.objects.all()
 
 
+class UserItemListView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        return Item.objects.filter(user=self.request.user)
+
+
 class ItemDetailView(RetrieveAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ItemDetailSerializer

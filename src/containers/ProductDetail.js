@@ -21,7 +21,19 @@ import {
 import { productDetailURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
-import { Card, Divider, Spin, Alert, Row, Col } from "antd";
+import {
+  Card,
+  Divider,
+  Spin,
+  Alert,
+  Row,
+  Col,
+  Steps,
+  message,
+  Progress,
+} from "antd";
+import { SmileOutlined } from "@ant-design/icons";
+const { Step } = Steps;
 
 class ProductDetail extends React.Component {
   state = {
@@ -30,6 +42,9 @@ class ProductDetail extends React.Component {
     formVisible: false,
     data: [],
     formData: {},
+    current: 0,
+    percent: 0,
+    status: "",
   };
 
   componentDidMount() {
@@ -52,6 +67,53 @@ class ProductDetail extends React.Component {
       .get(productDetailURL(params.productID))
       .then((res) => {
         console.log(res.data);
+        console.log(res.data.washed);
+        console.log(res.data.ironed);
+        console.log(res.data.packed);
+        console.log(res.data.ready);
+        if (
+          res.data.washed === true &&
+          res.data.ironed === false &&
+          res.data.packed === false &&
+          res.data.ready === false
+        ) {
+          this.setState({ current: 1 });
+          this.setState({ percent: 25 });
+          this.setState({ status: "active" });
+        } else if (
+          res.data.washed === true &&
+          res.data.ironed === true &&
+          res.data.packed === false &&
+          res.data.ready === false
+        ) {
+          this.setState({ current: 2 });
+          this.setState({ percent: 50 });
+          this.setState({ status: "active" });
+        } else if (
+          res.data.washed === true &&
+          res.data.ironed === true &&
+          res.data.packed === true &&
+          res.data.ready === false
+        ) {
+          this.setState({ current: 3 });
+          this.setState({ percent: 75 });
+          this.setState({ status: "active" });
+        } else if (
+          res.data.washed === true &&
+          res.data.ironed === true &&
+          res.data.packed === true &&
+          res.data.ready === true
+        ) {
+          this.setState({ current: 4 });
+          this.setState({ percent: 100 });
+          this.setState({ status: "success" });
+          message.success("Your cloth is ready for checkout");
+        } else {
+          this.setState({ current: 0 });
+          this.setState({ percent: 0 });
+          this.setState({ status: "exception" });
+        }
+
         this.setState({ data: res.data, loading: false });
       })
       .catch((err) => {
@@ -92,7 +154,16 @@ class ProductDetail extends React.Component {
   };
 
   render() {
-    const { data, error, formData, formVisible, loading } = this.state;
+    const {
+      data,
+      error,
+      formData,
+      formVisible,
+      loading,
+      current,
+      percent,
+      status,
+    } = this.state;
     const item = data;
     const { Meta } = Card;
     return (
@@ -219,21 +290,19 @@ class ProductDetail extends React.Component {
           </Grid.Row>
         </Grid> */}
 
-        <div className="site-card-wrapper">
-          <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-            <Col span={12}>
+        <div style={{ paddingBottom: 100 }}>
+          <Row>
+            <Col xs={24} sm={24} md={20} lg={12} xl={12}>
               <Card
                 style={{
-                  maxWidth: 500,
-                  marginTop: 10,
-                  minWidth: 200,
+                  margin: 10,
                   textAlign: "center",
                 }}
                 hoverable
                 cover={
                   <img
                     src={item.image}
-                    style={{ height: 300, maxWidth: 500, minWidth: 200 }}
+                    style={{ height: 300, minWidth: 50 }}
                     alt=""
                   />
                 }
@@ -245,23 +314,104 @@ class ProductDetail extends React.Component {
                   <h3 style={{ color: "Black", fontSize: 20 }}>
                     {item.category}
                   </h3>
+                  <h3 style={{ color: "Black", fontSize: 20 }}>
+                    {item.publish}
+                  </h3>
                 </Divider>
                 <Meta title={item.title} description={item.description} />
               </Card>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={20} lg={12} xl={12}>
               <Card
                 style={{
-                  maxWidth: 500,
-                  marginTop: 10,
-                  minWidth: 200,
+                  margin: 10,
                   textAlign: "center",
                 }}
                 hoverable
-                title="Card title"
+                title="Product Processing Details"
                 bordered={true}
               >
-                Card content
+                <Row gutter={16}>
+                  <Col style={{ background: "#0092ff" }} span={8}>
+                    <h3>Wash Status</h3>
+                  </Col>
+                  <Col span={16}>
+                    {item.washed === true ? (
+                      <h3 style={{ background: "#0092ff" }}>Washed</h3>
+                    ) : (
+                      <h3 style={{ background: "#0092ff" }}>Washing</h3>
+                    )}
+                  </Col>
+                </Row>
+                <Divider />
+                <Row gutter={16}>
+                  <Col style={{ background: "#0092ff" }} span={8}>
+                    <h3>Ironing Status</h3>
+                  </Col>
+                  <Col span={16}>
+                    {item.ironed === true ? (
+                      <h3 style={{ background: "#0092ff" }}>Ironed</h3>
+                    ) : (
+                      <h3 style={{ background: "#0092ff" }}>Ironing</h3>
+                    )}
+                  </Col>
+                </Row>
+                <Divider />
+                <Row gutter={16}>
+                  <Col style={{ background: "#0092ff" }} span={8}>
+                    <h3>Packing Status</h3>
+                  </Col>
+                  <Col span={16}>
+                    {item.packed === true ? (
+                      <h3 style={{ background: "#0092ff" }}>Packed</h3>
+                    ) : (
+                      <h3 style={{ background: "#0092ff" }}>Packing</h3>
+                    )}
+                  </Col>
+                </Row>
+                <Divider />
+                <Row gutter={16}>
+                  <Col style={{ background: "#0092ff" }} span={8}>
+                    <h3>Complete Status</h3>
+                  </Col>
+                  <Col span={16}>
+                    {item.ready === true ? (
+                      <h3 style={{ background: "#0092ff" }}>
+                        Ready for checkout
+                      </h3>
+                    ) : (
+                      <h3 style={{ background: "#0092ff" }}>
+                        Not ready for checkout
+                      </h3>
+                    )}
+                  </Col>
+                </Row>
+                {/* <Steps current={current}>
+                  {steps.map((item) => (
+                    <Step key={item.title} title={item.title} />
+                  ))}
+                </Steps>
+                <div className="steps-content">{steps[current].content}</div> */}
+                <Steps
+                  type="navigation"
+                  current={current}
+                  className="site-navigation-steps"
+                >
+                  <Step status="wait" title="Just In" />
+                  <Step status="process" title="Washed" />
+                  <Step status="process" title="Ironed" />
+                  <Step status="process" title="Packed" />
+                  <Step status="finish" title="Ready" />
+                </Steps>
+                <Progress
+                  type="circle"
+                  strokeColor={{
+                    "0%": "#108ee9",
+                    "100%": "#87d068",
+                  }}
+                  percent={percent}
+                  status={status}
+                />
               </Card>
             </Col>
           </Row>

@@ -5,8 +5,8 @@ import { Container, Message } from "semantic-ui-react";
 import { productListURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
-import { List, Card, Avatar, Spin, Alert } from "antd";
-
+import { List, Card, Avatar, Spin, Alert, Tag } from "antd";
+import { DollarOutlined } from "@ant-design/icons";
 class ProductList extends React.Component {
   state = {
     loading: false,
@@ -113,12 +113,11 @@ class ProductList extends React.Component {
         <List
           grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 3, xxl: 3 }}
           dataSource={data}
-          pagination={{ pageSize: 3 }}
+          pagination={{ pageSize: 6 }}
           renderItem={(item) => (
             <List.Item key={item.id}>
               <Card
-                onClick={() => this.props.history.push(`/products/${item.id}`)}
-                style={{ minHeight: 400 }}
+                style={{ minHeight: 300 }}
                 title={item.category}
                 hoverable
                 cover={<img src={item.image} style={{ height: 400 }} alt="" />}
@@ -130,6 +129,16 @@ class ProductList extends React.Component {
                   title={item.title}
                   description={item.description}
                 />
+                <div style={{ float: "right", marginTop: 5 }}>
+                  <Tag icon={<DollarOutlined />} color="#2db7f5">
+                    {item.price}
+                  </Tag>
+                </div>
+                <div style={{ float: "right", marginTop: 5 }}>
+                  <Tag icon={<DollarOutlined />} color="#2db7f5">
+                    {item.publish}
+                  </Tag>
+                </div>
               </Card>
             </List.Item>
           )}

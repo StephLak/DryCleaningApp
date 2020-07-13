@@ -10,6 +10,7 @@ import ProductDetail from "./containers/ProductDetail";
 import OrderSummary from "./containers/OrderSummary";
 import Checkout from "./containers/Checkout";
 import Profile from "./containers/Profile";
+import MyDashboard from "./containers/MyDashboard";
 
 const BaseRouter = () => (
   <Hoc>
@@ -20,6 +21,7 @@ const BaseRouter = () => (
     <Route path="/order-summary" component={OrderSummary} />
     <Route path="/checkout" component={Checkout} />
     <Route path="/profile" component={Profile} />
+    <Route path="/dashboard" component={MyDashboard} />
     <Route exact path="/" component={HomepageLayout} />
   </Hoc>
 );
