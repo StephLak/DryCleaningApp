@@ -1,14 +1,31 @@
 from django_countries.serializer_fields import CountryField
-from rest_framework import serializers
+from rest_framework import serializers, fields
 from core.models import (
     Address, Item, Order, OrderItem, Coupon,
-    Payment
+    Payment, UserProfile
 )
 
 
 class StringSerializer(serializers.StringRelatedField):
     def to_internal_value(self, value):
         return value
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            'id',
+            'photo',
+            'user',
+            'surname',
+            'first_name',
+            'last_name',
+            'phone_number',
+            'user'
+        )
 
 
 class CouponSerializer(serializers.ModelSerializer):
@@ -24,6 +41,10 @@ class CouponSerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
     label = serializers.SerializerMethodField()
+    profile = ProfileSerializer()
+    user = serializers.StringRelatedField()
+    publish = fields.DateTimeField(
+        input_formats=['%Y-%m-%dT%H:%M:%S:%fZ'], format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = Item
@@ -37,7 +58,9 @@ class ItemSerializer(serializers.ModelSerializer):
             'slug',
             'description',
             'image',
-            'publish'
+            'publish',
+            'profile',
+            'user',
         )
 
     def get_category(self, obj):
@@ -45,37 +68,6 @@ class ItemSerializer(serializers.ModelSerializer):
 
     def get_label(self, obj):
         return obj.get_label_display()
-
-
-# class VariationDetailSerializer(serializers.ModelSerializer):
-#     item = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Variation
-#         fields = (
-#             'id',
-#             'name',
-#             'item'
-#         )
-
-#     def get_item(self, obj):
-#         return ItemSerializer(obj.item).data
-
-
-# class ItemVariationDetailSerializer(serializers.ModelSerializer):
-#     variation = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = ItemVariation
-#         fields = (
-#             'id',
-#             'value',
-#             'attachment',
-#             'variation'
-#         )
-
-#     def get_variation(self, obj):
-#         return VariationDetailSerializer(obj.variation).data
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -124,34 +116,13 @@ class OrderSerializer(serializers.ModelSerializer):
         return None
 
 
-# class ItemVariationSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ItemVariation
-#         fields = (
-#             'id',
-#             'value',
-#             'attachment'
-#         )
-
-
-# class VariationSerializer(serializers.ModelSerializer):
-#     item_variations = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Variation
-#         fields = (
-#             'id',
-#             'name',
-#             'item_variations'
-#         )
-
-#     def get_item_variations(self, obj):
-#         return ItemVariationSerializer(obj.itemvariation_set.all(), many=True).data
-
-
 class ItemDetailSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
     label = serializers.SerializerMethodField()
+    profile = ProfileSerializer()
+    user = serializers.StringRelatedField()
+    publish = fields.DateTimeField(
+        input_formats=['%Y-%m-%dT%H:%M:%S:%fZ'], format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = Item
@@ -169,7 +140,9 @@ class ItemDetailSerializer(serializers.ModelSerializer):
             'washed',
             'ironed',
             'packed',
-            'ready'
+            'ready',
+            'profile',
+            'user'
         )
 
     def get_category(self, obj):

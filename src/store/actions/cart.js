@@ -4,33 +4,34 @@ import { orderSummaryURL } from "../../constants";
 
 export const cartStart = () => {
   return {
-    type: CART_START
+    type: CART_START,
   };
 };
 
-export const cartSuccess = data => {
+export const cartSuccess = (data) => {
   return {
     type: CART_SUCCESS,
-    data
+    data,
   };
 };
 
-export const cartFail = error => {
+export const cartFail = (error) => {
   return {
     type: CART_FAIL,
-    error: error
+    error: error,
   };
 };
 
 export const fetchCart = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(cartStart());
     authAxios
       .get(orderSummaryURL)
-      .then(res => {
+      .then((res) => {
         dispatch(cartSuccess(res.data));
+        console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         dispatch(cartFail(err));
       });
   };

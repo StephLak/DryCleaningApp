@@ -26,8 +26,10 @@ import {
   addressDeleteURL,
   userIDURL,
   paymentListURL,
+  profileDetailURL,
 } from "../constants";
 import { authAxios } from "../utils";
+import { Avatar } from "antd";
 
 const UPDATE_FORM = "UPDATE_FORM";
 const CREATE_FORM = "CREATE_FORM";
@@ -266,12 +268,14 @@ class Profile extends React.Component {
     countries: [],
     userID: null,
     selectedAddress: null,
+    profile: [],
   };
 
   componentDidMount() {
     this.handleFetchAddresses();
     this.handleFetchCountries();
     this.handleFetchUserID();
+    this.handleFetchProfile();
   }
 
   handleItemClick = (name) => {
@@ -356,6 +360,21 @@ class Profile extends React.Component {
     this.setState({ selectedAddress: null });
   };
 
+  handleFetchProfile = (profileID) => {
+    this.setState({ loading: true });
+    console.log("loading");
+    authAxios
+      .get(profileDetailURL(profileID))
+      .then((res) => {
+        this.setState({ profile: res.data, loading: false });
+        console.log(res.data);
+        console.log("loaded");
+      })
+      .catch((err) => {
+        this.setState({ error: err, loading: false });
+      });
+  };
+
   renderAddresses = () => {
     const {
       activeItem,
@@ -425,13 +444,15 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { activeItem, error, loading } = this.state;
+    const { activeItem, error, loading, profile } = this.state;
     const { isAuthenticated } = this.props;
     if (!isAuthenticated) {
       return <Redirect to="/login" />;
     }
     return (
       <div style={{ paddingBottom: 230 }}>
+        <h1>{profile.user}</h1>
+        <Avatar size={200} src={profile.photo} />
         <Grid container columns={2} divided>
           <Grid.Row columns={1}>
             <Grid.Column>

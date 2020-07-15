@@ -16,7 +16,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from core.models import Item, OrderItem, Order
 from .serializers import (
     ItemSerializer, OrderSerializer, ItemDetailSerializer, AddressSerializer,
-    PaymentSerializer
+    PaymentSerializer, ProfileSerializer
 )
 from core.models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile
 
@@ -135,7 +135,6 @@ class OrderDetailView(RetrieveAPIView):
 
 
 class PaymentView(APIView):
-
     def post(self, request, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
         userprofile = UserProfile.objects.get(user=self.request.user)
@@ -289,3 +288,18 @@ class PaymentListView(ListAPIView):
 
     def get_queryset(self):
         return Payment.objects.filter(user=self.request.user)
+
+
+class ProfileDetailView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = ProfileSerializer
+
+    def get_object(self):
+        try:
+            profile = UserProfile.objects.get(user=self.request.user)
+            return profile
+        except ObjectDoesNotExist:
+            raise Http404("You do not have a profile")
+
+    # def get_queryset(self):
+    #     return UserProfile.objects.filter(user=self.request.user)

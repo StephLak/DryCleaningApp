@@ -30,6 +30,8 @@ class ProductDetail extends React.Component {
     current: 0,
     percent: 0,
     status: "",
+    profile: [],
+    date: "",
   };
 
   componentDidMount() {
@@ -44,11 +46,11 @@ class ProductDetail extends React.Component {
     axios
       .get(productDetailURL(params.productID))
       .then((res) => {
+        var date = new Date();
+        this.setState({ date });
+        console.log(date);
+        console.log(res.data.publish);
         console.log(res.data);
-        console.log(res.data.washed);
-        console.log(res.data.ironed);
-        console.log(res.data.packed);
-        console.log(res.data.ready);
         if (
           res.data.washed === true &&
           res.data.ironed === false &&
@@ -91,8 +93,8 @@ class ProductDetail extends React.Component {
           this.setState({ percent: 0 });
           this.setState({ status: "exception" });
         }
-
         this.setState({ data: res.data, loading: false });
+        this.setState({ profile: res.data.profile, loading: false });
       })
       .catch((err) => {
         this.setState({ error: err, loading: false });
@@ -114,7 +116,15 @@ class ProductDetail extends React.Component {
   };
 
   render() {
-    const { data, error, loading, current, percent, status } = this.state;
+    const {
+      data,
+      error,
+      loading,
+      current,
+      percent,
+      status,
+      profile,
+    } = this.state;
     const item = data;
     const { Meta } = Card;
     return (
@@ -162,9 +172,10 @@ class ProductDetail extends React.Component {
                   <h3 style={{ color: "Black", fontSize: 20 }}>
                     {item.category}
                   </h3>
-                  {/* <h3 style={{ color: "Black", fontSize: 20 }}>
+                  <h3 style={{ color: "Black", fontSize: 20 }}>
                     {item.publish}
-                  </h3> */}
+                  </h3>
+                  <h4>{profile.surname}</h4>
                 </Divider>
                 <Meta title={item.title} description={item.description} />
               </Card>

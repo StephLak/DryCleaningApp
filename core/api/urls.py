@@ -15,7 +15,8 @@ from .views import (
     AddressUpdateView,
     AddressDeleteView,
     OrderItemDeleteView,
-    PaymentListView
+    PaymentListView,
+    ProfileDetailView
 )
 
 urlpatterns = [
@@ -39,5 +40,6 @@ urlpatterns = [
     path('order-item/update-quantity/',
          OrderQuantityUpdateView.as_view(), name='order-item-update-quantity'),
     path('payments/', PaymentListView.as_view(), name='payment-list'),
+    path('profile/<pk>/', ProfileDetailView.as_view(), name='profile-detail'),
 
 ]

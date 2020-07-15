@@ -71,24 +71,23 @@ class ProductList extends React.Component {
               <Card
                 style={{ minHeight: 300 }}
                 title={item.category}
+                extra={<h6>by {item.user}</h6>}
                 hoverable
                 cover={<img src={item.image} style={{ height: 400 }} alt="" />}
+                actions={[
+                  <h4>{item.price}</h4>,
+                  <h6>{item.publish}</h6>,
+                  <h4>by {item.user}</h4>,
+                ]}
               >
                 <Meta
-                  avatar={
-                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                  }
+                  avatar={<Avatar size={50} src={item.profile.photo} />}
                   title={item.title}
                   description={item.description}
                 />
                 <div style={{ float: "right", marginTop: 5 }}>
                   <Tag icon={<DollarOutlined />} color="#2db7f5">
                     {item.price}
-                  </Tag>
-                </div>
-                <div style={{ float: "right", marginTop: 5 }}>
-                  <Tag icon={<DollarOutlined />} color="#2db7f5">
-                    {item.publish}
                   </Tag>
                 </div>
               </Card>

@@ -92,7 +92,6 @@ class OrderSummary extends React.Component {
     if (!isAuthenticated) {
       return <Redirect to="/login" />;
     }
-    console.log(data);
 
     return (
       <Container>
