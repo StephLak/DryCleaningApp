@@ -125,11 +125,11 @@ const HomepageLayout = () => (
               needs... through pure data analytics.
             </p>
             <Header as="h3" style={{ fontSize: "2em" }}>
-              We Make Bananas That Can Dance
+              We Make Clothes That Are Classic
             </Header>
             <p style={{ fontSize: "1.33em" }}>
-              Yes that's right, you thought it was the stuff of dreams, but even
-              bananas can be bioengineered.
+              Yes that's right, you thought it was the stuff of dreams, but give
+              us a try.
             </p>
           </Grid.Column>
           <Grid.Column floated="right" width={6}>
@@ -189,12 +189,11 @@ const HomepageLayout = () => (
           <a href="#case-studies">Case Studies</a>
         </Divider>
         <Header as="h3" style={{ fontSize: "2em" }}>
-          Did We Tell You About Our Bananas?
+          Did We Tell You About Our Service?
         </Header>
         <p style={{ fontSize: "1.33em" }}>
           Yes I know you probably disregarded the earlier boasts as non-sequitur
-          filler content, but it's really true. It took years of gene splicing
-          and combinatory DNA research, but our bananas can really dance.
+          filler content, but it's really true.
         </p>
         <Button as="a" size="large">
           I'm Still Quite Interested

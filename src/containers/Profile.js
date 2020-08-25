@@ -578,9 +578,6 @@ class Profile extends React.Component {
                 <Descriptions.Item label="Last Name" span={3}>
                   {profile.last_name}
                 </Descriptions.Item>
-                <Descriptions.Item label="Date Joined" span={3}>
-                  {profile.date_joined}
-                </Descriptions.Item>
               </Descriptions>
             </AntCol>
           </AntRow>
