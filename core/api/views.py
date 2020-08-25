@@ -2,7 +2,7 @@ from django_countries import countries
 from django.db.models import Q
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from rest_framework.generics import (
@@ -289,6 +289,11 @@ class PaymentListView(ListAPIView):
     def get_queryset(self):
         return Payment.objects.filter(user=self.request.user)
 
+    # def post(self, request, *args, **kwargs):
+    #     photo = request.data['photo']
+    #     UserProfile.objects.create(photo=photo,)
+    #     return HttpResponse({'message': 'Photo Created'}, status=200)
+
 
 class ProfileDetailView(RetrieveAPIView):
     permission_classes = (IsAuthenticated, )
@@ -303,3 +308,15 @@ class ProfileDetailView(RetrieveAPIView):
 
     # def get_queryset(self):
     #     return UserProfile.objects.filter(user=self.request.user)
+
+
+class ProfileCreateView(CreateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = ProfileSerializer
+    queryset = UserProfile.objects.all()
+
+
+class ProfileUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = ProfileSerializer
+    queryset = UserProfile.objects.all()

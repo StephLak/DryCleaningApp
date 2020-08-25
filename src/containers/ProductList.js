@@ -1,12 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { Container, Message } from "semantic-ui-react";
-import { productListURL, addToCartURL } from "../constants";
+import { Container, Message, Label } from "semantic-ui-react";
+import { productListURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
-import { authAxios } from "../utils";
-import { List, Card, Avatar, Spin, Alert, Tag } from "antd";
-import { DollarOutlined } from "@ant-design/icons";
+import _ from "lodash";
+import { List, Card, Avatar, Spin, Alert } from "antd";
+
 class ProductList extends React.Component {
   state = {
     loading: false,
@@ -25,19 +25,6 @@ class ProductList extends React.Component {
         this.setState({ error: err, loading: false });
       });
   }
-
-  handleAddToCart = (slug) => {
-    this.setState({ loading: true });
-    authAxios
-      .post(addToCartURL, { slug })
-      .then((res) => {
-        this.props.refreshCart();
-        this.setState({ loading: false });
-      })
-      .catch((err) => {
-        this.setState({ error: err, loading: false });
-      });
-  };
 
   render() {
     const { data, error, loading } = this.state;
@@ -63,22 +50,18 @@ class ProductList extends React.Component {
           </div>
         )}
         <List
-          grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 3, xxl: 3 }}
+          grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3 }}
           dataSource={data}
           pagination={{ pageSize: 6 }}
           renderItem={(item) => (
             <List.Item key={item.id}>
               <Card
                 style={{ minHeight: 300 }}
-                title={item.category}
-                extra={<h6>by {item.user}</h6>}
+                title={_.toUpper(item.category)}
+                extra={<h4>{item.user}</h4>}
                 hoverable
                 cover={<img src={item.image} style={{ height: 400 }} alt="" />}
-                actions={[
-                  <h4>{item.price}</h4>,
-                  <h6>{item.publish}</h6>,
-                  <h4>by {item.user}</h4>,
-                ]}
+                actions={[<h4>Date Brought</h4>, <h4>{item.publish}</h4>]}
               >
                 <Meta
                   avatar={<Avatar size={50} src={item.profile.photo} />}
@@ -86,9 +69,9 @@ class ProductList extends React.Component {
                   description={item.description}
                 />
                 <div style={{ float: "right", marginTop: 5 }}>
-                  <Tag icon={<DollarOutlined />} color="#2db7f5">
-                    {item.price}
-                  </Tag>
+                  <Label color="teal" tag size="large">
+                    #{item.price}
+                  </Label>
                 </div>
               </Card>
             </List.Item>

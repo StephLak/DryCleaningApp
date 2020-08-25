@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
-import { Container, Message } from "semantic-ui-react";
+import { Container, Message, Label } from "semantic-ui-react";
 import { productDetailURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
@@ -116,15 +116,7 @@ class ProductDetail extends React.Component {
   };
 
   render() {
-    const {
-      data,
-      error,
-      loading,
-      current,
-      percent,
-      status,
-      profile,
-    } = this.state;
+    const { data, error, loading, current, percent, status } = this.state;
     const item = data;
     const { Meta } = Card;
     return (
@@ -148,113 +140,117 @@ class ProductDetail extends React.Component {
           </div>
         )}
 
-        <div style={{ paddingBottom: 100 }}>
-          <Row>
-            <Col xs={24} sm={24} md={20} lg={12} xl={12}>
-              <Card
-                style={{
-                  margin: 10,
-                  textAlign: "center",
-                }}
-                hoverable
-                cover={
-                  <img
-                    src={item.image}
-                    style={{ height: 300, minWidth: 50 }}
-                    alt=""
-                  />
-                }
+        <Row>
+          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+            <Card
+              style={{
+                margin: 10,
+                backgroundColor: "lavender",
+              }}
+              hoverable
+              cover={
+                <img
+                  src={item.image}
+                  style={{ height: 300, minWidth: 50 }}
+                  alt=""
+                />
+              }
+              actions={[<h4>Date Brought</h4>, <h4>{item.publish}</h4>]}
+            >
+              <Divider
+                orientation="left"
+                style={{ color: "Red", fontWeight: "bold" }}
               >
-                <Divider
-                  orientation="left"
-                  style={{ color: "Red", fontWeight: "bold" }}
-                >
-                  <h3 style={{ color: "Black", fontSize: 20 }}>
-                    {item.category}
-                  </h3>
-                  <h3 style={{ color: "Black", fontSize: 20 }}>
-                    {item.publish}
-                  </h3>
-                  <h4>{profile.surname}</h4>
-                </Divider>
-                <Meta title={item.title} description={item.description} />
-              </Card>
-            </Col>
-            <Col xs={24} sm={24} md={20} lg={12} xl={12}>
-              <Card
-                style={{
-                  margin: 10,
-                  textAlign: "center",
-                }}
-                hoverable
-                title="Product Processing Details"
-                bordered={true}
-              >
-                <Container>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Steps
-                        type="navigation"
-                        current={current}
-                        direction="vertical"
-                        className="site-navigation-steps"
-                      >
-                        <Step status="wait" title="Just In" />
-                        <Step status="process" title="Washed" />
-                        <Step status="process" title="Ironed" />
-                        <Step status="process" title="Packed" />
-                        <Step status="finish" title="Ready" />
-                      </Steps>
-                    </Col>
-                    <Col span={12}>
-                      <Row style={{ marginLeft: 40, marginTop: 40 }}>
-                        <Progress
-                          type="circle"
-                          strokeColor={{
-                            "0%": "#108ee9",
-                            "100%": "#87d068",
-                          }}
-                          percent={percent}
-                          status={status}
-                        />
-                      </Row>
-                      <Row style={{ float: "right", marginTop: 100 }}>
-                        {item.washed === true &&
-                        item.ironed === true &&
-                        item.packed === true &&
-                        item.ready === true ? (
-                          <Tooltip title="You can now add to cart">
-                            <Button
-                              type="primary"
-                              shape="round"
-                              icon={<ShoppingCartOutlined />}
-                              size="large"
-                              onClick={() => this.handleAddToCart(item.slug)}
-                            >
-                              Add To Cart
-                            </Button>
-                          </Tooltip>
-                        ) : (
-                          <Tooltip title="You can't add to cart yet">
-                            <Button
-                              type="primary"
-                              shape="round"
-                              icon={<ShoppingCartOutlined />}
-                              size="large"
-                              disabled
-                            >
-                              Add To Cart
-                            </Button>
-                          </Tooltip>
-                        )}
-                      </Row>
-                    </Col>
+                <h3 style={{ color: "Black", fontSize: 20 }}>
+                  {item.category}
+                </h3>
+              </Divider>
+              <Meta title={item.title} description={item.description} />
+              <div style={{ float: "right", marginTop: 5 }}>
+                <Label color="teal" tag size="large">
+                  #{item.price}
+                </Label>
+              </div>
+            </Card>
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+            <Card
+              style={{
+                margin: 10,
+                textAlign: "center",
+                backgroundColor: "lavender",
+              }}
+              hoverable
+              title="Product Processing Details"
+              bordered={true}
+            >
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Steps
+                    type="navigation"
+                    current={current}
+                    direction="vertical"
+                    className="site-navigation-steps"
+                  >
+                    <Step status="wait" title="Just In" />
+                    <Step status="process" title="Washed" />
+                    <Step status="process" title="Ironed" />
+                    <Step status="process" title="Packed" />
+                    <Step status="finish" title="Ready" />
+                  </Steps>
+                </Col>
+                <Col span={12}>
+                  <Row
+                    justify="center"
+                    align="middle"
+                    style={{ marginTop: 40 }}
+                  >
+                    <Progress
+                      type="circle"
+                      width={150}
+                      strokeColor={{
+                        "0%": "#108ee9",
+                        "100%": "#87d068",
+                      }}
+                      percent={percent}
+                      status={status}
+                    />
                   </Row>
-                </Container>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+                  <Row justify="end" align="middle" style={{ marginTop: 80 }}>
+                    {item.washed === true &&
+                    item.ironed === true &&
+                    item.packed === true &&
+                    item.ready === true ? (
+                      <Tooltip title="You can now add to cart">
+                        <Button
+                          type="primary"
+                          shape="round"
+                          icon={<ShoppingCartOutlined />}
+                          size="large"
+                          onClick={() => this.handleAddToCart(item.slug)}
+                        >
+                          Add To Cart
+                        </Button>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="You can't add to cart yet">
+                        <Button
+                          type="primary"
+                          shape="round"
+                          icon={<ShoppingCartOutlined />}
+                          size="large"
+                          disabled
+                        >
+                          Add To Cart
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </Row>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        </Row>
       </Container>
     );
   }

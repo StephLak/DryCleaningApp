@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { Container, Message } from "semantic-ui-react";
+import { Container, Message, Label } from "semantic-ui-react";
 import { dashboardURL, addToCartURL } from "../constants";
 import { fetchCart } from "../store/actions/cart";
 import { authAxios } from "../utils";
-import { List, Card, Avatar, Spin, Alert } from "antd";
+import _ from "lodash";
+import { List, Card, Spin, Alert } from "antd";
 
 class MyDashboard extends React.Component {
   state = {
@@ -67,25 +68,25 @@ class MyDashboard extends React.Component {
           </div>
         )}
         <List
-          grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 3, xxl: 3 }}
+          grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3 }}
           dataSource={data}
-          pagination={{ pageSize: 3 }}
+          pagination={{ pageSize: 6 }}
           renderItem={(item) => (
             <List.Item key={item.id}>
               <Card
                 onClick={() => this.props.history.push(`/products/${item.id}`)}
-                style={{ minHeight: 400 }}
-                title={item.category}
+                style={{ minHeight: 300 }}
+                title={_.toUpper(item.category)}
                 hoverable
                 cover={<img src={item.image} style={{ height: 400 }} alt="" />}
+                actions={[<h4>Date Brought</h4>, <h4>{item.publish}</h4>]}
               >
-                <Meta
-                  avatar={
-                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                  }
-                  title={item.title}
-                  description={item.description}
-                />
+                <Meta title={item.title} description={item.description} />
+                <div style={{ float: "right", marginTop: 5 }}>
+                  <Label color="teal" tag size="large">
+                    #{item.price}
+                  </Label>
+                </div>
               </Card>
             </List.Item>
           )}

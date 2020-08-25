@@ -122,7 +122,7 @@ class CustomLayout extends React.Component {
               </Menu.Item>
               <Menu.Item key="2" icon={<FileOutlined />}>
                 <Link to="/products" style={{ fontSize: 18 }}>
-                  Products
+                  Collections
                 </Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<UserOutlined />}>

@@ -7,6 +7,9 @@ from django_countries.fields import CountryField
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+import json
+from django.core import serializers
+
 
 CATEGORY_CHOICES = (
     ('S', 'Shirt'),
@@ -45,6 +48,14 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_email(self):
+        return self.user.email
+
+    def get_filename(self):
+        photo_string = json.dumps(str(self.photo))
+        return photo_string.split('/')[-1].split('.')[0]
+        # return photo_string
+
 
 class Item(models.Model):
     user = models.ForeignKey(User,
@@ -67,7 +78,7 @@ class Item(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('-publish',)
+        ordering = ('-updated', '-publish', )
 
     def __str__(self):
         return self.title

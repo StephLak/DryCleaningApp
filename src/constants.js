@@ -23,3 +23,5 @@ export const orderItemDeleteURL = (id) =>
 export const orderItemUpdateQuantityURL = `${endpoint}/order-item/update-quantity/`;
 export const paymentListURL = `${endpoint}/payments/`;
 export const profileDetailURL = (id) => `${endpoint}/profile/${id}/`;
+export const profileCreateURL = `${endpoint}/profile/create/`;
+export const profileUpdateURL = (id) => `${endpoint}/profile/${id}/update/`;

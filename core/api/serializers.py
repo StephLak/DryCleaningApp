@@ -13,19 +13,30 @@ class StringSerializer(serializers.StringRelatedField):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
+    email = serializers.SerializerMethodField()
+    filename = serializers.SerializerMethodField()
+    # date_joined = fields.DateTimeField(format='YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]')
 
     class Meta:
         model = UserProfile
         fields = (
             'id',
             'photo',
-            'user',
             'surname',
             'first_name',
             'last_name',
+            'filename',
             'phone_number',
-            'user'
+            'user',
+            'email',
+            # 'date_joined'
         )
+
+    def get_email(self, obj):
+        return obj.get_email()
+
+    def get_filename(self, obj):
+        return obj.get_filename()
 
 
 class CouponSerializer(serializers.ModelSerializer):
@@ -44,7 +55,7 @@ class ItemSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
     user = serializers.StringRelatedField()
     publish = fields.DateTimeField(
-        input_formats=['%Y-%m-%dT%H:%M:%S:%fZ'], format='%Y-%m-%d %H:%M:%S')
+        input_formats=['%Y-%m-%dT%H:%M:%S:%fZ'], format='%A,%dth %B,%Y %I:%M:%S%p')
 
     class Meta:
         model = Item
@@ -122,7 +133,7 @@ class ItemDetailSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
     user = serializers.StringRelatedField()
     publish = fields.DateTimeField(
-        input_formats=['%Y-%m-%dT%H:%M:%S:%fZ'], format='%Y-%m-%d %H:%M:%S')
+        input_formats=['%Y-%m-%dT%H:%M:%S:%fZ'], format='%A,%dth %B,%Y %I:%M:%S%p')
 
     class Meta:
         model = Item
